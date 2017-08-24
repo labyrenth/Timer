@@ -12,6 +12,7 @@ namespace TIMER
     {
         public void Read(ref List<String> array, StreamReader streamReader)
         {
+            streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
             try
             {
                 array.Clear();
@@ -25,12 +26,6 @@ namespace TIMER
                 MessageBox.Show(e.Message + "\nGetArray과정에서 문제가 생겼습니다.");
                 MessageBox.Show(e.Source);
             }
-            /*finally
-            {
-                streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
-            }*/
-
-
         }
     }
 }
