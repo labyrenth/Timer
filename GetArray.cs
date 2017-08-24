@@ -10,16 +10,27 @@ namespace TIMER
 {
     class GetArray
     {
-        public void Get(ref List<String> array, string targetPath)
+        public void Read(ref List<String> array, StreamReader streamReader)
         {
             try
             {
-                array = new List<String>(File.ReadAllLines(targetPath));
+                array.Clear();
+                while (!streamReader.EndOfStream)
+                {
+                    array.Add(streamReader.ReadLine());
+                }
             }
-            catch
+            catch (Exception e)
             {
-                array = new List<string>();
+                MessageBox.Show(e.Message + "\nGetArray과정에서 문제가 생겼습니다.");
+                MessageBox.Show(e.Source);
             }
+            /*finally
+            {
+                streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
+            }*/
+
+
         }
     }
 }

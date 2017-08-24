@@ -1,6 +1,6 @@
 ﻿namespace TIMER
 {
-    partial class Form1
+    partial class MainTimerForm
     {
         /// <summary>
         /// 필수 디자이너 변수입니다.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainTimerForm));
             this.SECOND = new System.Windows.Forms.TextBox();
             this.MINUTE = new System.Windows.Forms.TextBox();
             this.HOUR = new System.Windows.Forms.TextBox();
@@ -207,7 +207,7 @@
             this.종료ToolStripMenuItem.Text = "종료";
             this.종료ToolStripMenuItem.Click += new System.EventHandler(this.EndProgram);
             // 
-            // Form1
+            // MainTimerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -229,8 +229,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
-            this.Name = "Form1";
-            this.Text = "타이머 5.0v";
+            this.Name = "MainTimerForm";
+            this.Text = "타이머 6.0v";
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

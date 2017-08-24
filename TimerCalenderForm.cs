@@ -11,18 +11,16 @@ using System.IO;
 
 namespace TIMER
 {
-    public partial class Form2 : Form
+    public partial class TimerCalenderForm : Form
     {
-        Form1 form1 = new Form1();
         CalTime caltime = new CalTime();
         private Exception f;
-        GetArray getarr = new GetArray();
         private List<string> timeStringArray;
 
-        public Form2(string timeSavedTextFilePath)
+        public TimerCalenderForm(List<string> timerDataArray)
         {
             InitializeComponent();
-            getarr.Get(ref timeStringArray, timeSavedTextFilePath);
+            this.timeStringArray = timerDataArray;
         }
 
         private void Form2_End_Click(object sender, EventArgs e)
@@ -33,7 +31,6 @@ namespace TIMER
 
         private void Search_Start_Click(object sender, EventArgs e)
         {
-            
             // 바운더리 제작.
             int startfrontline = Startfrontline(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
             int endfrontline = Endfrontline(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day);
@@ -63,7 +60,6 @@ namespace TIMER
 
         void SearchDate()
         {
-            
             int H = 0;
             int M = 0;
             int S = 0;

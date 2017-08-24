@@ -18,13 +18,12 @@ D:\Users\Jae Yeoung Jang\Documents\Visual Studio 2015\Projects\TIMER\TIMER\obj\D
 D:\Users\Jae Yeoung Jang\Documents\Visual Studio 2015\Projects\TIMER\TIMER\obj\Debug\TIMER.Form2.resources
 D:\Users\Jae Yeoung Jang\Documents\Visual Studio 2015\Projects\TIMER\TIMER\obj\Debug\TIMER.Properties.Resources.resources
 D:\Users\Jae Yeoung Jang\Documents\Visual Studio 2015\Projects\TIMER\TIMER\obj\Debug\TIMER.csproj.GenerateResource.Cache
-C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER.Form1.resources
-C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER.Form2.resources
 C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER.Properties.Resources.resources
 C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER.csproj.GenerateResource.Cache
-C:\Users\ak569\Documents\TIMER\TIMER\bin\Debug\TIMER5.0.exe.config
-C:\Users\ak569\Documents\TIMER\TIMER\bin\Debug\TIMER5.0.exe
-C:\Users\ak569\Documents\TIMER\TIMER\bin\Debug\TIMER5.0.pdb
-C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER5.0.exe
-C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER5.0.pdb
-C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER.csprojResolveAssemblyReference.cache
+C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER.MainTimerForm.resources
+C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER.TimerCalenderForm.resources
+C:\Users\ak569\Documents\TIMER\TIMER\bin\Debug\TIMER6.0.exe.config
+C:\Users\ak569\Documents\TIMER\TIMER\bin\Debug\TIMER6.0.exe
+C:\Users\ak569\Documents\TIMER\TIMER\bin\Debug\TIMER6.0.pdb
+C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER6.0.exe
+C:\Users\ak569\Documents\TIMER\TIMER\obj\Debug\TIMER6.0.pdb

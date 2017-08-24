@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,10 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
-
+using System.Threading;
 namespace TIMER
 {
-    public partial class Form1 : Form
+    public partial class MainTimerForm : Form
     {
         private enum FormState
         {
@@ -25,47 +26,58 @@ namespace TIMER
         private int minute;
         private int hour;
         // 처음본 함수. Visual Studio에서 기본 제공하는 Timer 관련 함수인것 같다.
-        Timer timer = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         CalTime caltime = new CalTime();
-        GetArray getarr = new GetArray();
-        private List<String> array;
+        GetArray readArr = new GetArray();
+        SaveArray saveArr = new SaveArray();
+        private List<String> timerDataSavedArray;
         private string myDocumentsPath;
         private string studyTimeTextPath;
         private FormState formState;
-        public static FileStream timerDataSavedFile;
-        public Form1()
+        private FileStream timerDataSavedFileStream;
+        private StreamReader timerDataStreamReader;
+        private StreamWriter timerDataStreamWriter;
+        public MainTimerForm()
         {
             // 초기화.
-            InitializeComponent();
-            hour = 0;
-            second = 0;
-            minute = 0;
-            array = new List<String>();
-            myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            studyTimeTextPath = myDocumentsPath + @"\MyTimer\StudyTime.txt";
 
-            try
-            {
-                if (File.Exists(studyTimeTextPath) == false)
+                InitializeComponent();
+                hour = 0;
+                second = 0;
+                minute = 0;
+                timerDataSavedArray = new List<String>();
+                myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                studyTimeTextPath = myDocumentsPath + @"\MyTimer\StudyTime.txt";
+
+                try
                 {
-                    DirectoryInfo di = new DirectoryInfo(myDocumentsPath + "\\MyTimer");
-                    di.Create();
-                    //The File.Create method creates the file and opens a FileStream on the file. So your file is already open. -> File.Create().Close() 해주어야 Process 사용 오류메세지가 뜨지 않음.
-                    File.Create(studyTimeTextPath).Close();
+                    if (File.Exists(myDocumentsPath + "\\MyTimer") == false)
+                    {
+                        DirectoryInfo di = new DirectoryInfo(myDocumentsPath + "\\MyTimer");
+                        di.Create();
+                        //The File.Create method creates the file and opens a FileStream on the file. So your file is already open. -> File.Create().Close() 해주어야 Process 사용 오류메세지가 뜨지 않음.
+                        //File.Create(studyTimeTextPath).Close();
+                    }
+                    timerDataSavedFileStream = File.Open(studyTimeTextPath, FileMode.OpenOrCreate);
+                    timerDataStreamReader = new StreamReader(timerDataSavedFileStream);
+                    timerDataStreamWriter = new StreamWriter(timerDataSavedFileStream);
+                    //초기화
+                    readArr.Read(ref timerDataSavedArray, timerDataStreamReader);
                 }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
 
-            this.Resize += Form1_Resize;
-            notifyIcon1.ContextMenuStrip = contextMenuStrip1;
-            formState = FormState.IDLE;
+                this.Resize += Form1_Resize;
+                notifyIcon1.ContextMenuStrip = contextMenuStrip1;
+                formState = FormState.IDLE;
+
         }
 
         // 시간을 계산해서 출력하는 함수.
         void timer_Tick(object sender, EventArgs e)
+
         {
             SECOND.Text = second.ToString();
             MINUTE.Text = minute.ToString();
@@ -121,15 +133,13 @@ namespace TIMER
 
         private void SAVE_TIMER_CLICK(object sender, EventArgs e)
         {
-            // 버튼을 실행할때마다 파일을 불러온다.
-            getarr.Get(ref array, studyTimeTextPath);
             // 장대한 저장데이터 관리의 시작. count는 중복된 내용이 있어서 교체가 이루어 졌는지 아닌지를 판단!
             int count = 0;
 
-            for (int i = 0; i < array.Count; i++)
+            for (int i = 0; i < timerDataSavedArray.Count; i++)
             {
                 // Array[i]는 TXT파일이 한줄씩 들어가있는 string[] 형식. 이때 string[] TempToday는 Array의 내용을 . 을 기준으로 분리한다.
-                string[] TempToday = array[i].Split('.');
+                string[] TempToday = timerDataSavedArray[i].Split('.');
                 // 날짜 기준으로 중복되는 내용이 있을시
                 if (TempToday[0] == DateTime.Now.Year.ToString() &&
                     TempToday[1] == DateTime.Now.Month.ToString() &&
@@ -142,8 +152,9 @@ namespace TIMER
                     // 시간 계산.
                     caltime.GetTimer(ref temphour, ref tempminute, ref tempsecond);
                     // Array[i]에 덮어쓴다!
-                    array[i] = TempToday[0] + "." + TempToday[1] + "." + TempToday[2] + "." +
+                    timerDataSavedArray[i] = TempToday[0] + "." + TempToday[1] + "." + TempToday[2] + "." +
                         temphour.ToString() + "." + tempminute.ToString() + "." + tempsecond.ToString();
+
                     // count를 증가시켜 변경이 이루어졌다는 것을 확인.
                     count++;
                 }
@@ -160,25 +171,19 @@ namespace TIMER
                 + "." + HOUR.Text
                 + "." + MINUTE.Text
                 + "." + SECOND.Text + "\r\n";
-
-                File.AppendAllText(studyTimeTextPath, Report);
+                timerDataSavedArray.Add(Report);
             }
-            else
-            {
-                // 변경이 이루어졌을시 그냥 Array를 다시 덮어쓴다.
-                File.WriteAllLines(studyTimeTextPath, array);
-            }
+            saveArr.Save(this.timerDataStreamWriter,this.timerDataSavedArray);
             // RESET_CLICK을 클릭한것과 같은 내용을 실행. 메소드를 불러오니까 같은 내용을 중복해서 쓸 필요가 없다.
             RESET_Click(sender, e);
         }
+
         private void SHOW_TIMER_Click(object sender, EventArgs e)
         {
             bool isMessageBoxShow = false;
-            //ShowTime을 클릭했을때도 자료를 불러온다.
-            getarr.Get(ref array, studyTimeTextPath);
-            for (int i = 0; i < array.Count; i++)
+            for (int i = 0; i < timerDataSavedArray.Count; i++)
             {
-                string[] TempToday = array[i].Split('.');
+                string[] TempToday = timerDataSavedArray[i].Split('.');
                 // 오늘의 날짜와 맞는 날짜에 해당하는 시간을 골라서 messagebox를 띄워준다.
                 if (TempToday[0] == DateTime.Now.Year.ToString() &&
                     TempToday[1] == DateTime.Now.Month.ToString() &&
@@ -197,7 +202,7 @@ namespace TIMER
 
         private void SEARCH_TIMER_Click(object sender, EventArgs e)
         {
-            Form2 ab = new Form2(studyTimeTextPath);     //About 폼을 객체화
+            TimerCalenderForm ab = new TimerCalenderForm(this.timerDataSavedArray);     //About 폼을 객체화
             ab.ShowDialog();
         }
 
@@ -224,8 +229,16 @@ namespace TIMER
 
         private void EndProgram(object sender, EventArgs e)
         {
+            EndProgramSequence();
+        }
+
+        private void EndProgramSequence()
+        {
             notifyIcon1.Visible = false;
             Application.ExitThread();
+            timerDataStreamReader.Close();
+            timerDataStreamWriter.Close();
+            timerDataSavedFileStream.Close();
             Application.Exit();
         }
     }

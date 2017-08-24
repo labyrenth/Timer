@@ -2,7 +2,7 @@
 
 namespace TIMER
 {
-    partial class Form2
+    partial class TimerCalenderForm
     {
         /// <summary>
         /// Required designer variable.
